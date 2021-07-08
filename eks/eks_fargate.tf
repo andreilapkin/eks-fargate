@@ -12,7 +12,7 @@ resource "aws_eks_fargate_profile" "main" {
   for_each               = local.fargate_profiles_expanded
   fargate_profile_name   = "${var.region}-eks-${var.name}-${each.key}-${random_id.fargate_profile[each.key].hex}"
   pod_execution_role_arn = aws_iam_role.fargate_pod_execution_role.arn
-  subnet_ids             = data.aws_subnet_ids.private_subnets.ids
+  subnet_ids             = var.private_subnets
 
   dynamic "selector" {
     for_each = each.value.selectors

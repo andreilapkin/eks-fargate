@@ -16,7 +16,7 @@ resource "aws_eks_cluster" "main" {
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
   vpc_config {
-    subnet_ids = concat(tolist(data.aws_subnet_ids.public_subnets.ids), tolist(data.aws_subnet_ids.private_subnets.ids))
+    subnet_ids = concat(tolist(var.public_subnets), tolist(var.private_subnets))
   }
 
   timeouts {
@@ -27,6 +27,5 @@ resource "aws_eks_cluster" "main" {
     aws_cloudwatch_log_group.eks_cluster,
     aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.AmazonEKSServicePolicy,
-    aws_nat_gateway.nat
   ]
 }

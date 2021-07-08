@@ -1,5 +1,7 @@
-locals {
-  global_vars = {
-    origin = "terraform"
-  }
+variable "region" {
+  default = "us-east-1"
+}
+
+variable "name" {
+  default = "web"
 }
