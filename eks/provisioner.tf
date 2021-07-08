@@ -15,14 +15,3 @@ EOF
   }
   depends_on = [aws_eks_fargate_profile.main, data.template_file.kubeconfig]
 }
-
-resource "null_resource" "default_namespace_zero_limit" {
-  provisioner "local-exec" {
-    interpreter = ["/bin/zsh", "-c"]
-    command     = <<EOF
-kubectl --kubeconfig=<(echo '${data.template_file.kubeconfig.rendered}') \
-apply -f kube/zero-limit-range.yaml --namespace=default
-EOF
-  }
-  depends_on = [aws_eks_fargate_profile.main, data.template_file.kubeconfig]
-}
