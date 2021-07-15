@@ -3,7 +3,7 @@ locals {
 }
 
 resource "random_id" "fargate_profile" {
-  for_each               = local.fargate_profiles_expanded
+  for_each    = local.fargate_profiles_expanded
   byte_length = 2
 }
 

@@ -8,3 +8,5 @@ variable "kubeconfig_path" {}
 variable "private_subnets" {}
 variable "public_subnets" {}
 data "aws_caller_identity" "current" {}
+variable "eks_elb_ingress_controller_namespace" {}
+variable "eks_elb_ingress_controller_name" {}

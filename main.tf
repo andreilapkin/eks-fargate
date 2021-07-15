@@ -31,29 +31,34 @@ module "vpc" {
 }
 
 module "eks" {
-  source          = "./eks"
-  region          = var.region
-  vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.private_subnets
-  public_subnets  = module.vpc.public_subnets
-  k8s_version     = "1.20"
-  name            = "web"
-  kubeconfig_path = "~/.kube"
+  source                               = "./eks"
+  region                               = var.region
+  vpc_id                               = module.vpc.vpc_id
+  private_subnets                      = module.vpc.private_subnets
+  public_subnets                       = module.vpc.public_subnets
+  k8s_version                          = "1.20"
+  name                                 = "web"
+  kubeconfig_path                      = "~/.kube"
+  eks_elb_ingress_controller_namespace = "ingress-nginx"
+  eks_elb_ingress_controller_name      = "ingress-nginx"
   fargate_profiles = {
     system = {
       name = "system"
       selectors = [
         {
           namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
         },
         {
           namespace = "kubernetes-dashboard"
         },
         {
           namespace = "cattle-system"
+        },
+        {
+          namespace = "ingress-nginx"
+        },
+        {
+          namespace = "cert-manager"
         }
       ]
     }
