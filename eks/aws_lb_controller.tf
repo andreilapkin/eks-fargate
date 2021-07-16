@@ -1,19 +1,16 @@
-resource "null_resource" "coredns_patch" {
-  triggers = {
-    fargate_profiles = aws_eks_fargate_profile.main["system"].arn
+resource "kubernetes_service_account" "aws_lb_controller" {
+  automount_service_account_token = true
+  metadata {
+    name      = "aws-load-balancer-controller"
+    namespace = "kube-system"
+    labels = {
+      "app.kubernetes.io/component" = "controller"
+      "app.kubernetes.io/name"      = "aws-load-balancer-controller"
+    }
+    annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.aws_lb_controller_role.arn
+    }
   }
-  provisioner "local-exec" {
-    interpreter = ["/bin/zsh", "-c"]
-    command     = <<EOF
-kubectl --kubeconfig=<(echo '${data.template_file.kubeconfig.rendered}') \
-patch deployment coredns \
---namespace kube-system \
---type=json \
--p='[{"op": "remove", "path": "/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type"}]'
-kubectl rollout restart -n kube-system deployment coredns
-EOF
-  }
-  depends_on = [aws_eks_fargate_profile.main, data.template_file.kubeconfig]
 }
 
 resource "helm_release" "cert_manager" {
