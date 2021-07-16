@@ -34,7 +34,7 @@ resource "helm_release" "cert_manager" {
     name  = "installCRDs"
     value = "true"
   }
-  depends_on = [aws_eks_fargate_profile.main, null_resource.coredns_patch]
+  depends_on = [aws_eks_fargate_profile.main, null_resource.coredns_patch, local_file.kubeconfig]
 }
 
 resource "helm_release" "aws_lb_controller" {
@@ -59,16 +59,16 @@ resource "helm_release" "aws_lb_controller" {
     value = "aws-load-balancer-controller"
   }
   set {
-    name = "replicaCount"
+    name  = "replicaCount"
     value = "1"
   }
   set {
-    name = "region"
+    name  = "region"
     value = var.region
   }
   set {
-    name = "vpcId"
-    value = "var.vpc_id"
+    name  = "vpcId"
+    value = var.vpc_id
   }
-  depends_on = [aws_eks_fargate_profile.main, helm_release.cert_manager]
+  depends_on = [aws_eks_fargate_profile.main, helm_release.cert_manager, local_file.kubeconfig]
 }
