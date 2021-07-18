@@ -52,7 +52,7 @@ module "eks" {
           namespace = "kubernetes-dashboard"
         },
         {
-          namespace = "cattle-system"
+          namespace = "prometheus"
         },
         {
           namespace = "ingress-nginx"

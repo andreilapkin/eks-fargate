@@ -22,9 +22,9 @@ resource "aws_eks_fargate_profile" "main" {
     }
   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
 
   timeouts {
     create = "30m"

@@ -11,6 +11,7 @@ resource "kubernetes_service_account" "aws_lb_controller" {
       "eks.amazonaws.com/role-arn" = aws_iam_role.aws_lb_controller_role.arn
     }
   }
+  depends_on = [aws_eks_fargate_profile.main, local_file.kubeconfig]
 }
 
 resource "helm_release" "cert_manager" {
